@@ -6,6 +6,24 @@
 Также можно увидеть кол-во дисков "потеряшек". Т.е. тех дисков которые не прикреплены ни к какой виртуалке.
 Также можно отслеживать затраты на машины. Как по одтельной машине, так и по всем машинам по дням.
 
+Для удобства, база куда складыватся данные о виртуалках поднята вместе с DataLens.
+Чтобы поднять ее, надо скачать DataLens: https://github.com/datalens-tech/datalens
+Далее, в конец файла файла docker-compose.yaml нужно добавить несколько строчек:
+  leadtime:
+    image: postgres:latest
+    container_name: pg_db
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRESS_DB: leadtime
+    ports:
+      - "5433:5432"
+    volumes:
+      - "./postgres_data:/var/lib/postgresql/data/"
+      
+Также, чтобы удаленно просматривать базу на хосте где развернут DataLens нужно пробросить порты:
+ssh -l <login> -L 5455:localhost:5433 <ip of host with datalens>
+После этого можно будет подсоединяться к базе скажем через DBeaver указывая адрес базы как localhost:5455 и имя базы: leadtime
 
 Для поднятия проекта локально:
 1. Устанавливаем виртуальное окружение: python -m venv .venv
